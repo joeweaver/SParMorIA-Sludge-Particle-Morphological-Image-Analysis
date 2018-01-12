@@ -44,18 +44,8 @@ function processFolder(readDir,writeDir){
         write(inputPath);
 		print(inputPath);
 	    if(endsWith(inputPath,'.tif')){
-	      open(inputPath);
-	      fname = getTitle();
-	      write(fname + " (blue)");
-	      run("Split Channels");
-	      selectWindow(fname + " (blue)");
-	      close();		
-	      imageCalculator("Average create 32-bit", fname + " (red)",fname + " (green)");
-		  selectWindow(fname + " (green)");
-		  close();
-		  selectWindow(fname + " (red)");
-		  close();
-		  selectWindow("Result of "+ fname + " (red)");
+	      open(inputPath);  
+		  fname=images[i];          run("32-bit");
           //run("Enhance Local Contrast (CLAHE)", "blocksize=127 histogram=256 maximum=3 mask=*None*");
 		  setOption("BlackBackground", true);
 		  setAutoThreshold("RenyiEntropy");
@@ -67,10 +57,11 @@ function processFolder(readDir,writeDir){
 		  run("Invert");
 		  open(inputPath);
 		  selectWindow(fname);
-		  run("Add Image...", "image=[Result of "+fname+" (red)] x=0 y=0 opacity=60 zero");
+		  baseName=substring(fname,0,lengthOf(fname)-4);
+		  run("Add Image...", "image=["+baseName+"-1.tif] x=0 y=0 opacity=60 zero");
 		  run("8-bit");
 		  run("Scale...", "x=.25 y=.25 width=1024 height=822 interpolation=Bicubic average create");
-          saveAs("Gif",writeDir +"\\"+fname+"_overlay.gif");
+          saveAs("Gif",writeDir +"\\"+baseName+"_overlay.gif");
 		  run("Close All");
 		  while (nImages>0) { 
 			selectImage(nImages); 

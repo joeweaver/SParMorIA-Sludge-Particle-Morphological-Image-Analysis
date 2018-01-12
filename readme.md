@@ -1,1 +1,2 @@
 ImageJ-win64.exe -macro ASPIA-Activated_Sludge_Particle_Image_Analysis "folder=../folder1 parameters=a.properties output=../samples/Output"
+ImageJ-win64.exe --headless --console -macro ASPIA-Activated_Sludge_Particle_Image_Analysis "C:\Users\jeweave4\Dropbox\Professional\Active\Research\Tools\Activated Sludge Particle Image Analysis\params_example.txt"
