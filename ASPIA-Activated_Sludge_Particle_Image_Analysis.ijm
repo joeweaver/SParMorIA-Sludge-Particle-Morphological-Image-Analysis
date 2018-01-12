@@ -1,8 +1,6 @@
 macro "ASPIA: Activated Sludge Particle Image Analysis"{
-  inputFolder =getDirectory("PSD - Choose the input folder!");
-  outputFolder =getDirectory("PSD - Choose the output folder!");
-	
-  processFolder(inputFolder,outputFolder)
+s=getArgument();
+print(s);processFolder(ASPIAinputFolder,ASPIAoutputFolder);
 	
   function processFolder(readDir,writeDir){
     images = getFileList(readDir);
