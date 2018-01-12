@@ -1,12 +1,48 @@
 macro "ASPIA: Activated Sludge Particle Image Analysis"{
-s=getArgument();
-print(s);processFolder(ASPIAinputFolder,ASPIAoutputFolder);
+        args = getArgument() 
+        print(args); 
+//Of historical interest, this whole macro was an attempt to make a an old hardcoded imageJ macro a bit
+//more flexible.  As you can see below, argument parsing and such is extremely fun in the native macro. 
+// language. Were it any more so, it might be wise to scrap and rewrite in python, or at least write an 
+// argparse macro in python which then calls the meat of the image processing macro.
+
+var inputFolder = ""
+var outputFolder = ""
+
+sayHi();
+filestring=File.openAsString(args); 
+rows=split(filestring, "\n"); 
+for (i=0; i<rows.length; i++){
+  args=split(rows[i],",");
+  for (j=0; j<args.length; j++){
+    arg=split(args[j],"=");
+    argKey=arg[0];
+	argVal=arg[1];
+    print(argKey);
+	print(argVal);
+	if(argKey=="indir"){
+		inputFolder = argVal;
+	}
+	if(argKey=="outdir"){
+		outputFolder = argVal;
+	}
+  }
+  processFolder(inputFolder,outputFolder);
+}
+
+function sayHi(){
+	print("Hi\n");
+}
 	
-  function processFolder(readDir,writeDir){
+function processFolder(readDir,writeDir){
+	print("Proc folder");
+	print(readDir);
     images = getFileList(readDir);
-      for (i=0; i<images.length; i++) {
+    print(images[1]);  
+	for (i=0; i<images.length; i++) {
         inputPath = readDir + "\\" + images[i];
         write(inputPath);
+		print(inputPath);
 	    if(endsWith(inputPath,'.tif')){
 	      open(inputPath);
 	      fname = getTitle();
