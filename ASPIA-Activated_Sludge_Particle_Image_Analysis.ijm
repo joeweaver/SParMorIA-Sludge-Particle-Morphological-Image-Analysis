@@ -53,15 +53,24 @@ function processFolder(readDir,writeDir){
 		  //Set size to be roughly 50 um diameter
 		  run("Analyze Particles...", "size=0.00002-Infinity show=Outlines display exclude clear include summarize in_situ");
 		  selectWindow("Results");
-	      saveAs("Results",outputFolder+"\\"+fname+"_PSD.csv");
+	      resultsDir=writeDir+"\\"+"results";
+		  print(resultsDir);
+          if(!File.exists(resultsDir)){
+			File.makeDirectory(resultsDir);
+		  }
+	      saveAs("Results",resultsDir+"\\"+fname+"_PSD.csv");
 		  run("Invert");
 		  open(inputPath);
 		  selectWindow(fname);
 		  baseName=substring(fname,0,lengthOf(fname)-4);
 		  run("Add Image...", "image=["+baseName+"-1.tif] x=0 y=0 opacity=60 zero");
 		  run("8-bit");
-		  run("Scale...", "x=.25 y=.25 width=1024 height=822 interpolation=Bicubic average create");
-          saveAs("Gif",writeDir +"\\"+baseName+"_overlay.gif");
+		 // run("Scale...", "x=.25 y=.25 width=1024 height=822 interpolation=Bicubic average create");
+	      overlayDir=writeDir+"\\"+"overlays";
+          if(!File.exists(overlayDir)){
+			File.makeDirectory(overlayDir);
+		  }
+          saveAs("Gif",overlayDir +"\\"+baseName+"_overlay.gif");
 		  run("Close All");
 		  while (nImages>0) { 
 			selectImage(nImages); 
