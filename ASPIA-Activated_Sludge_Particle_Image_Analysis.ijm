@@ -90,7 +90,7 @@ function processFolder(readDir,writeDir,useCLAHE){
 		  run("Set Measurements...", "area mean min centroid perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction add redirect=None decimal=3");
 		  //Set size to be roughly 50 um diameter
 			getPixelSize(unit,pw,ph,pd);
-			minArea=0;
+			minArea=1963.495408;
 			if(pw!=ph){
 				//TODO pick reasonable default or interpretation for minimum particle size when pixels are not square
 				exit("This macro does not support images with pixels that are not square.");
@@ -114,7 +114,7 @@ function processFolder(readDir,writeDir,useCLAHE){
 				}
 				size=convFactor*minArea;
 			}
-		  run("Analyze Particles...", "size="+size+"-Infinity show=Outlines display exclude clear include summarize in_situ");
+		  run("Analyze Particles...", "size="+size+"-Infinity show=Outlines display exclude clear summarize in_situ");
 		  selectWindow("Results");
 		  if("inputbase"==writeDir){
 			writeDir=readDir + "\\output";
