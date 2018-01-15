@@ -7,6 +7,7 @@ Basic
 * param check
 * comments in param file?
 * send gif and csv output to separate directories
+* deal with hardcoded size
 
 Feature added
 * record bounding box dimensions for each particle

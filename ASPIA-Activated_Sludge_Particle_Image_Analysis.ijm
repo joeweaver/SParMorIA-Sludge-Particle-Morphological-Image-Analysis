@@ -6,10 +6,7 @@ macro "ASPIA: Activated Sludge Particle Image Analysis"{
 // language. Were it any more so, it might be wise to scrap and rewrite in python, or at least write an 
 // argparse macro in python which then calls the meat of the image processing macro.
 
-var inputFolder = ""
-var outputFolder = ""
 
-sayHi();
 filestring=File.openAsString(args); 
 rows=split(filestring, "\n"); 
 for (i=0; i<rows.length; i++){
@@ -18,8 +15,6 @@ for (i=0; i<rows.length; i++){
     arg=split(args[j],"=");
     argKey=arg[0];
 	argVal=arg[1];
-    print(argKey);
-	print(argVal);
 	if(argKey=="indir"){
 		inputFolder = argVal;
 	}
@@ -30,19 +25,12 @@ for (i=0; i<rows.length; i++){
   processFolder(inputFolder,outputFolder);
 }
 
-function sayHi(){
-	print("Hi\n");
-}
 	
 function processFolder(readDir,writeDir){
-	print("Proc folder");
-	print(readDir);
     images = getFileList(readDir);
-    print(images[1]);  
 	for (i=0; i<images.length; i++) {
         inputPath = readDir + "\\" + images[i];
         write(inputPath);
-		print(inputPath);
 	    if(endsWith(inputPath,'.tif')){
 	      open(inputPath);  
 		  fname=images[i];          run("32-bit");
@@ -54,7 +42,6 @@ function processFolder(readDir,writeDir){
 		  run("Analyze Particles...", "size=0.00002-Infinity show=Outlines display exclude clear include summarize in_situ");
 		  selectWindow("Results");
 	      resultsDir=writeDir+"\\"+"results";
-		  print(resultsDir);
           if(!File.exists(resultsDir)){
 			File.makeDirectory(resultsDir);
 		  }
