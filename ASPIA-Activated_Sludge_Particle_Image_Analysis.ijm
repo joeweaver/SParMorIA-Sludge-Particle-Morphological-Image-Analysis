@@ -57,6 +57,9 @@ function processFolder(readDir,writeDir){
 				else if("m"==unit){
 					convFactor=0.000000000001
 				}
+				else if("pixel"==unit){
+					convFactor=1
+				}
 				else{
 					exit("Don't know how to support pixel size info using the unit: "  + unit);
 				}
