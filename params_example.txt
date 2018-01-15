@@ -1,1 +1,5 @@
-indir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\testdata\\,outdir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\testdata\\output\\,useCLAHE=no
+#This is a comment. There are many like it, but this is one is here.
+useCLAHE=no,outdir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\output
+indir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\testdata,outdir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\testdata\\output,useCLAHE=no
+indir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\testdata2
+indir=C:\\Users\\jeweave4\\Dropbox\\Professional\\Active\\Research\\Mainline\\AGS Trials\\Trial 4 - Continuous Flow with Selectors\\Data\\testdata3,outdir=inputbase
