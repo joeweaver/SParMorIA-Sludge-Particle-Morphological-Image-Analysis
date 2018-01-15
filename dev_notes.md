@@ -11,3 +11,5 @@ Basic
 
 Feature added
 * record bounding box dimensions for each particle
+* more graceful exit when running into an error, such as size
+* global/default processing parameters

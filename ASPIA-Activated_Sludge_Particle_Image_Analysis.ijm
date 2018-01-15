@@ -39,7 +39,30 @@ function processFolder(readDir,writeDir){
 		  setAutoThreshold("RenyiEntropy");
 		  run("Set Measurements...", "area mean min centroid perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction add redirect=None decimal=3");
 		  //Set size to be roughly 50 um diameter
-		  run("Analyze Particles...", "size=0.00002-Infinity show=Outlines display exclude clear include summarize in_situ");
+			getPixelSize(unit,pw,ph,pd);
+			print(unit);
+			minArea=0;
+			if(pw!=ph){
+				//TODO pick reasonable default or interpretation for minimum particle size when pixels are not square
+				exit("This macro does not support images with pixels that are not square.");
+			}
+			else{
+				convFactor=1;
+				if("cm"==unit){
+					convFactor=0.00000001;
+				}
+				else if("um"==unit){
+					convFactor=1;
+				}
+				else if("m"==unit){
+					convFactor=0.000000000001
+				}
+				else{
+					exit("Don't know how to support pixel size info using the unit: "  + unit);
+				}
+				size=convFactor*minArea;
+			}
+		  run("Analyze Particles...", "size="+size+"-Infinity show=Outlines display exclude clear include summarize in_situ");
 		  selectWindow("Results");
 	      resultsDir=writeDir+"\\"+"results";
           if(!File.exists(resultsDir)){
