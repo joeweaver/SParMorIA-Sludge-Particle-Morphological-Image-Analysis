@@ -86,11 +86,11 @@ function processFolder(readDir,writeDir,useCLAHE){
 		}	
 
 		  setOption("BlackBackground", true);
-		  setAutoThreshold("RenyiEntropy");
+		  setAutoThreshold("Otsu");
 		  run("Set Measurements...", "area mean min centroid perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction add redirect=None decimal=3");
 		  //Set size to be roughly 50 um diameter
 			getPixelSize(unit,pw,ph,pd);
-			minArea=1963.495408;
+			minArea=314//1963.495408;
 			if(pw!=ph){
 				//TODO pick reasonable default or interpretation for minimum particle size when pixels are not square
 				exit("This macro does not support images with pixels that are not square.");
