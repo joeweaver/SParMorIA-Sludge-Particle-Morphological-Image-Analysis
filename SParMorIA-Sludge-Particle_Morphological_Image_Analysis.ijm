@@ -1,4 +1,4 @@
-macro "ASPIA: Activated Sludge Particle Image Analysis"{
+macro "SParMorIA: Sludge Particle Morphological Image Analysis"{
 
 // args should point to a file containing processing information. 
 // See params_example.txt
