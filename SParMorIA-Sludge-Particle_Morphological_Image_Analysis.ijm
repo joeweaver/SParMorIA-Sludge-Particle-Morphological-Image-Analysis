@@ -1,8 +1,8 @@
 macro "SParMorIA: Sludge Particle Morphological Image Analysis"{
 
-// args should point to a file containing processing information. 
+// args should point to a file containing processing information.
 // See params_example.txt
-args = getArgument(); 
+args = getArgument();
 
 // Of historical interest, this whole macro was an attempt to make a an old 
 // hardcoded imageJ macro a bit more flexible.  As you can see below, argument 
@@ -17,9 +17,9 @@ gParam_outputFolder = "inputbase";
 
 // BEGIN SECTION ARGUMENT AND PARAMETER PARSING
 filestring = File.openAsString(args); 
-rows = split(filestring, "\n"); 
+rows = split(filestring, "\n");
 
-// each line can be a comment, a set of global parameters, or directions for 
+// each line can be a comment, a set of global parameters, or directions for
 // specific input folders
 // right now, there is no way to specific settings for individual images.
 
@@ -31,8 +31,8 @@ for (i = 0; i < rows.length; i++){
   else{
 	//all other lines are comma-separated parameters
 	// if the first arg is "inputFolder" we are processing a specific folder
-    // otherwise, parameters take global effect.  Global parameters are 
-    // superceded by folder specific instructions and are overwritten if 
+    // otherwise, parameters take global effect.  Global parameters are
+    // superceded by folder specific instructions and are overwritten if
     // redefined in a later global param line
 	lineArgs = split(rows[i], ",");
     //looking for "indir=" at beginning of row to identify parameter types
@@ -82,20 +82,23 @@ for (i = 0; i < rows.length; i++){
 // BEGIN SECTION ACTUAL IMAGE PROCESSING	
 function processFolder(readDir, writeDir, useCLAHE){
     images = getFileList(readDir);
-	for (i = 0; i < images.length; i++) {
+	for (i = 0; i < images.length; i++){
         inputPath = readDir + "\\" + images[i];
 	    if(endsWith(inputPath, '.tif')){
-	      open(inputPath);  
+	      open(inputPath);
 		  fname = images[i];
           run("32-bit");
 
           if("YES" == useCLAHE){
-            run("Enhance Local Contrast (CLAHE)", "blocksize=127 histogram=256 maximum=3 mask=*None*");
+            run("Enhance Local Contrast (CLAHE)", 
+                "blocksize=127 histogram=256 maximum=3 mask=*None*");
           }	
 
           setOption("BlackBackground", true);
           setAutoThreshold("Otsu");
-          run("Set Measurements...", "area mean min centroid perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction add redirect=None decimal=3");
+          run("Set Measurements...", "area mean min centroid perimeter" +
+               " bounding fit shape feret's integrated median skewness" +
+               " kurtosis area_fraction add redirect=None decimal=3");
         
           // Set size to be roughly 50 um diameter
           getPixelSize(unit, pw, ph, pd);
@@ -103,7 +106,7 @@ function processFolder(readDir, writeDir, useCLAHE){
           if(pw != ph){
             // TODO pick reasonable default or interpretation for minimum 
             // particle size when pixels are not square
-            exit("This macro does not support images with pixels that are not square.");
+            exit("This macro does not support pixels that are not square.");
           }
           else{
             convFactor = 1;
@@ -120,11 +123,14 @@ function processFolder(readDir, writeDir, useCLAHE){
                 convFactor=1
             }
             else{
-                exit("Don't know how to support pixel size info using the unit: "  + unit);
+                exit("Don't know how to support pixel size using the unit: "
+                     + unit);
             }
             size = convFactor * minArea;
           }
-		  run("Analyze Particles...", "size=" + size + "-Infinity show=Outlines display exclude clear summarize in_situ");
+		  run("Analyze Particles...", "size=" + size + 
+              "-Infinity show=Outlines display exclude clear summarize" +
+              " in_situ");
 		  selectWindow("Results");
 		  if("inputbase" == writeDir){
 			writeDir=readDir + "\\output";
@@ -141,7 +147,8 @@ function processFolder(readDir, writeDir, useCLAHE){
 		  open(inputPath);
 		  selectWindow(fname);
 		  baseName = substring(fname, 0, lengthOf(fname) - 4);
-		  run("Add Image...", "image=["+baseName+"-1.tif] x=0 y=0 opacity=60 zero");
+		  run("Add Image...", "image=["  +baseName +
+              "-1.tif] x=0 y=0 opacity=60 zero");
 		  run("8-bit");
 
 	      overlayDir = writeDir + "\\" + "overlays";
