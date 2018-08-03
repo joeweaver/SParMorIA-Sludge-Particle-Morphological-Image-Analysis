@@ -16,9 +16,6 @@ args = getArgument();
 /////////////////////////////////////////////////////////////////////////////
 List.set("gParam_useCLAHE", "YES");
 List.set("gParam_outputFolder", "inputbase");
-                  
-gParam_useCLAHE = List.get("gParam_useCLAHE");
-gParam_outputFolder = List.get("gParam_outputFolder");
 
 /////////////////////////////////////////////////////////////////////////////
 // Argument and parameter parsing
@@ -39,37 +36,47 @@ for (i = 0; i < rows.length; i++){
   // global parameters or input folders with optional parameter overrides.
   // The second case is identified by the first paramter being "indir"
   else{ 
-    lineArgs = split(rows[i], ",");
+    // looking for "indir=" at beginning of row to identify parameter types
+    // #TODO be more forgiving of spaces between =
+    isGlobal = ("indir=" != substring(rows[i], 0, 6));
     
-    //looking for "indir=" at beginning of row to identify parameter types
+    parPrefix = "";
     
-    // no indir found, so we are setting a global param
-    if("indir=" != substring(rows[i], 0, 6)){
-      // #TODO can refactor param reading code
-      for (j = 0; j < lineArgs.length; j++){
-        arg=split(lineArgs[j], "=");
-        argKey = arg[0];
-        argVal = arg[1];
-        print("Using global option. Key: " + argKey + " val: " + argVal);
-        List.set("gParam_" + argKey, argVal);
-      }
+    if(isGlobal){ 
+      print("Setting global params.");
+      readParams(rows[i], "gParam_");
     }
-    // indir was found, so we are setting params for a folder
-    else{ //directory-specific options
-      // reset params to global values
-      List.set("useCLAHE", List.get("gParam_useCLAHE"));
-      List.set("outdir", List.get("gParam_outdir"));
-
-      // read in all other params
-      for (j=0; j < lineArgs.length; j++){
-        arg=split(lineArgs[j], "=");
-        List.set(arg[0], arg[1]);
-      }
-        
-    // where the work actually gets done
-    processFolder();
+    else{
+      resetLocals();
+      readParams(rows[i], "");
+      
+      //Process the input folder
+      processFolder();
     }
   }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Read key/value pairs from a line and store them in the list.
+/////////////////////////////////////////////////////////////////////////////
+function readParams(line, prefix){
+  lineArgs = split(line, ",");
+  for (j = 0; j < lineArgs.length; j++){
+    arg=split(lineArgs[j], "=");
+    print("Using global option. Key: " + arg[0] + " val: " + arg[1]);
+    List.set(prefix + arg[0], arg[1]);
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Reset all local args to global values. 
+// Avoids using local args from otherfolders.
+/////////////////////////////////////////////////////////////////////////////
+function resetLocals(){
+  // I don't immediately see an easy way to iterate through the list.
+  // #TOD find a less brute force reset
+  List.set("useCLAHE", List.get("gParam_useCLAHE"));
+  List.set("outdir", List.get("gParam_outdir")); 
 }
 
 // BEGIN SECTION ACTUAL IMAGE PROCESSING
