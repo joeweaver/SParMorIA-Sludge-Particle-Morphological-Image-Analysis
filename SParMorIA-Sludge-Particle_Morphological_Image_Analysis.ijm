@@ -16,6 +16,7 @@ args = getArgument();
 /////////////////////////////////////////////////////////////////////////////
 List.set("gParam_useCLAHE", "YES");
 List.set("gParam_outputFolder", "inputbase");
+List.set("gParam_minDiamMicrons", "50");
 
 /////////////////////////////////////////////////////////////////////////////
 // Define useful constants
@@ -66,6 +67,7 @@ for (i = 0; i < rows.length; i++){
 // Read key/value pairs from a line and store them in the list.
 /////////////////////////////////////////////////////////////////////////////
 function readParams(line, prefix){
+  // #TODO gracefully handle blank lines and other format breaking issues
   lineArgs = split(line, ",");
   for (j = 0; j < lineArgs.length; j++){
     arg=split(lineArgs[j], "=");
@@ -83,6 +85,7 @@ function resetLocals(){
   // #TOD find a less brute force reset
   List.set("useCLAHE", List.get("gParam_useCLAHE"));
   List.set("outdir", List.get("gParam_outdir")); 
+  List.set("minDiamMicrons", List.get("gParam_minDiamMicrons")); 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -123,7 +126,8 @@ function processFolder(){
       // Set size to be roughly 50 um diameter
       getPixelSize(unit, pw, ph, pd);
       // #TODO this should be a param
-      minArea = 3.14159265 * ((50 / 2)^2); // (sq microns for 50 um diameter)
+      minDiamUm = parseInt(List.get("minDiamMicrons"));
+      minArea = 3.14159265 * ((minDiamUm / 2)^2); //sq microns
       if(pw != ph){
         // TODO pick reasonable default or interpretation for minimum 
         // particle size when pixels are not square
