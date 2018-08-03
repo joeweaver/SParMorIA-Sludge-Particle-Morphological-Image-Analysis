@@ -18,6 +18,15 @@ List.set("gParam_useCLAHE", "YES");
 List.set("gParam_outputFolder", "inputbase");
 
 /////////////////////////////////////////////////////////////////////////////
+// Define useful constants
+/////////////////////////////////////////////////////////////////////////////
+List.set("sq_cm_to_sq_um", "0.00000001");
+List.set("sq_m_to_sq_um" , "0.000000000001");
+List.set("sq_um_to_sq_um" , "1"); //seems silly, but works with code
+List.set("sq_pixel_to_um" , "1"); //understood that min-area is in px
+
+
+/////////////////////////////////////////////////////////////////////////////
 // Argument and parameter parsing
 /////////////////////////////////////////////////////////////////////////////
 filestring = File.openAsString(args); 
@@ -26,7 +35,6 @@ rows = split(filestring, "\n");
 // Each line can be a comment, a set of global parameters, or directions for
 // specific input folders. Right now, there is no way to specify settings for 
 // individual images.
-
 for (i = 0; i < rows.length; i++){
   // Found a comment line
   if("#" == substring(rows[i], 0, 1)){
@@ -39,8 +47,6 @@ for (i = 0; i < rows.length; i++){
     // looking for "indir=" at beginning of row to identify parameter types
     // #TODO be more forgiving of spaces between =
     isGlobal = ("indir=" != substring(rows[i], 0, 6));
-    
-    parPrefix = "";
     
     if(isGlobal){ 
       print("Setting global params.");
@@ -79,18 +85,25 @@ function resetLocals(){
   List.set("outdir", List.get("gParam_outdir")); 
 }
 
-// BEGIN SECTION ACTUAL IMAGE PROCESSING
-// note on lack of args. I prefer to pass args to functions, but List appears
+/////////////////////////////////////////////////////////////////////////////
+// Process all the images in a specified input folder and save results.
+// Note on lack of args. I prefer to pass args to functions, but List appears
 // global, so there's no need here
+/////////////////////////////////////////////////////////////////////////////
 function processFolder(){
   readDir = List.get("indir");
   writeDir = List.get("outdir");
   images = getFileList(readDir);
+  
+  // Process folder image by image
   for (i = 0; i < images.length; i++){
     inputPath = readDir + "\\" + images[i];
+    // Images must have .tif extension to be recognized
     if(endsWith(inputPath, '.tif')){
       open(inputPath);
       fname = images[i];
+      
+      // All operations assume 32 bit images
       run("32-bit");
 
       if("YES" == toUpperCase(List.get("useCLAHE"))){
@@ -98,44 +111,38 @@ function processFolder(){
             "blocksize=127 histogram=256 maximum=3 mask=*None*");
       }
 
+      // #TODO these should be params
       setOption("BlackBackground", true);
       setAutoThreshold("Otsu");
       run("Set Measurements...", "area mean min centroid perimeter" +
            " bounding fit shape feret's integrated median skewness" +
            " kurtosis area_fraction add redirect=None decimal=3");
     
+    
+      //Determine minimum size particle to observe
       // Set size to be roughly 50 um diameter
       getPixelSize(unit, pw, ph, pd);
+      // #TODO this should be a param
       minArea = 314/1963.495408;
       if(pw != ph){
         // TODO pick reasonable default or interpretation for minimum 
         // particle size when pixels are not square
         exit("This macro does not support pixels that are not square.");
       }
-      else{
-        // #TODO use list to store conversion factors
-        convFactor = 1;
-        if("cm" == unit){
-            convFactor=0.00000001;
-        }
-        else if("um" == unit){
-            convFactor=1;
-        }
-        else if("m" == unit){
-            convFactor=0.000000000001
-        }
-        else if("pixel" == unit){
-            convFactor=1
-        }
-        else{
-            exit("Don't know how to support pixel size using the unit: "
-                 + unit);
-        }
-        size = convFactor * minArea;
+
+      convFactor = List.get("sq_" + unit + "_to_sq_um");
+      if( "" == convFactor){
+        exit("Don't know how to support pixel size given as unit: " + unit);
       }
+
+      size = parseFloat(convFactor) * minArea;
+    
+      // Perform image analysis
       run("Analyze Particles...", "size=" + size + 
               "-Infinity show=Outlines display exclude clear summarize" +
               " in_situ");
+      
+      // Write output
       selectWindow("Results");
       if("inputbase" == writeDir){
         writeDir=readDir + "\\output";
@@ -162,6 +169,8 @@ function processFolder(){
       }
       saveAs("Gif", overlayDir + "\\" + baseName + "_overlay.gif");
       run("Close All");
+      
+      // Cleanup after ourselves
       while (nImages > 0) { 
         selectImage(nImages); 
         lose(); 
