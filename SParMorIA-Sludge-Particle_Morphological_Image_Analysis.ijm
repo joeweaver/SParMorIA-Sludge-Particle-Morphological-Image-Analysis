@@ -11,75 +11,73 @@ args = getArgument();
 // write an argparse macro in python which then calls the meat of the image 
 // processing macro.
 
-// DEFAULT PARAMETERS
-gParam_useCLAHE = "NO";
-gParam_outputFolder = "inputbase";
+/////////////////////////////////////////////////////////////////////////////
+// Default parameters
+/////////////////////////////////////////////////////////////////////////////
+List.set("gParam_useCLAHE", "YES");
+List.set("gParam_outputFolder", "inputbase");
+                  
+gParam_useCLAHE = List.get("gParam_useCLAHE");
+gParam_outputFolder = List.get("gParam_outputFolder");
 
-// BEGIN SECTION ARGUMENT AND PARAMETER PARSING
+/////////////////////////////////////////////////////////////////////////////
+// Argument and parameter parsing
+/////////////////////////////////////////////////////////////////////////////
 filestring = File.openAsString(args); 
 rows = split(filestring, "\n");
 
-// each line can be a comment, a set of global parameters, or directions for
-// specific input folders
-// right now, there is no way to specific settings for individual images.
+// Each line can be a comment, a set of global parameters, or directions for
+// specific input folders. Right now, there is no way to specify settings for 
+// individual images.
 
 for (i = 0; i < rows.length; i++){
-  //# indicates a comment
+  // Found a comment line
   if("#" == substring(rows[i], 0, 1)){
     print("Found comment: " + rows[i]);
   }
-  else{ //all other lines are comma-separated parameters
-    // if the first arg is "inputFolder" we are processing a specific folder
-    // otherwise, parameters take global effect.  Global parameters are
-    // superceded by folder specific instructions and are overwritten if
-    // redefined in a later global param line
+  // All non comment lines are comma-separated parameters and may specifiy
+  // global parameters or input folders with optional parameter overrides.
+  // The second case is identified by the first paramter being "indir"
+  else{ 
     lineArgs = split(rows[i], ",");
+    
     //looking for "indir=" at beginning of row to identify parameter types
-    //no indir found, so setting global param
+    
+    // no indir found, so we are setting a global param
     if("indir=" != substring(rows[i], 0, 6)){
+      // #TODO can refactor param reading code
       for (j = 0; j < lineArgs.length; j++){
         arg=split(lineArgs[j], "=");
         argKey = arg[0];
         argVal = arg[1];
         print("Using global option. Key: " + argKey + " val: " + argVal);
-        //doing something hackey here. afaik, macros don't support dicts
-        if(argKey == "useCLAHE"){
-          gParam_useCLAHE = toUpperCase(argVal);
-        }
-        if(argKey == "outdir"){
-          gParam_outputFolder = argVal;
-        }
+        List.set("gParam_" + argKey, argVal);
       }
     }
+    // indir was found, so we are setting params for a folder
     else{ //directory-specific options
       // reset params to global values
-      local_useCLAHE = gParam_useCLAHE;
-      local_outputFolder = gParam_outputFolder;
+      List.set("useCLAHE", List.get("gParam_useCLAHE"));
+      List.set("outdir", List.get("gParam_outdir"));
 
       // read in all other params
       for (j=0; j < lineArgs.length; j++){
         arg=split(lineArgs[j], "=");
-        argKey = arg[0];
-        argVal = arg[1];
-        if(argKey == "indir"){
-          inputFolder = argVal;
-        }
-        if(argKey == "outdir"){
-          local_outputFolder = argVal;
-        }
-        if(argKey == "useCLAHE"){
-          local_useCLAHE = argVal;
-        }
+        List.set(arg[0], arg[1]);
       }
         
     // where the work actually gets done
-    processFolder(inputFolder, local_outputFolder, local_useCLAHE);
+    processFolder();
     }
   }
 }
 
 // BEGIN SECTION ACTUAL IMAGE PROCESSING
-function processFolder(readDir, writeDir, useCLAHE){
+// note on lack of args. I prefer to pass args to functions, but List appears
+// global, so there's no need here
+function processFolder(){
+  readDir = List.get("indir");
+  writeDir = List.get("outdir");
   images = getFileList(readDir);
   for (i = 0; i < images.length; i++){
     inputPath = readDir + "\\" + images[i];
@@ -88,7 +86,7 @@ function processFolder(readDir, writeDir, useCLAHE){
       fname = images[i];
       run("32-bit");
 
-      if("YES" == useCLAHE){
+      if("YES" == toUpperCase(List.get("useCLAHE"))){
         run("Enhance Local Contrast (CLAHE)", 
             "blocksize=127 histogram=256 maximum=3 mask=*None*");
       }
@@ -108,6 +106,7 @@ function processFolder(readDir, writeDir, useCLAHE){
         exit("This macro does not support pixels that are not square.");
       }
       else{
+        // #TODO use list to store conversion factors
         convFactor = 1;
         if("cm" == unit){
             convFactor=0.00000001;
