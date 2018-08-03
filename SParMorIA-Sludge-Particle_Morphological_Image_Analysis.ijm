@@ -123,7 +123,7 @@ function processFolder(){
       // Set size to be roughly 50 um diameter
       getPixelSize(unit, pw, ph, pd);
       // #TODO this should be a param
-      minArea = 314/1963.495408;
+      minArea = 3.14159265*(50^2); // (sq microns for 50 um diamter)//314/1963.495408;
       if(pw != ph){
         // TODO pick reasonable default or interpretation for minimum 
         // particle size when pixels are not square
