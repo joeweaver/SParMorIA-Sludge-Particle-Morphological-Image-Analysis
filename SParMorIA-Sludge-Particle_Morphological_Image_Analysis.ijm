@@ -26,10 +26,10 @@ List.set("gParam_darkBackground", "true");  //or "false"
 /////////////////////////////////////////////////////////////////////////////
 // Define useful constants
 /////////////////////////////////////////////////////////////////////////////
-List.set("sq_cm_to_sq_um", "0.00000001");
-List.set("sq_m_to_sq_um" , "0.000000000001");
+List.set("sq_um_to_sq_cm", "0.00000001");
+List.set("sq_um_to_sq_m" , "0.000000000001");
 List.set("sq_um_to_sq_um" , "1"); //seems silly, but works with code
-List.set("sq_pixel_to_um" , "1"); //understood that min-area is in px
+List.set("sq_um_to_sq_pixel" , "1"); //understood that min-area is in px
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ function processFolder(){
         exit("This macro does not support pixels that are not square.");
       }
 
-      convFactor = List.get("sq_" + unit + "_to_sq_um");
+      convFactor = List.get("sq_um_to_sq_" + unit);
       if( "" == convFactor){
         exit("Don't know how to support pixel size given as unit: " + unit);
       }
