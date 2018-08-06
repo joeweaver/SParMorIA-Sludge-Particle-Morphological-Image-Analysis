@@ -17,6 +17,11 @@ args = getArgument();
 List.set("gParam_useCLAHE", "YES");
 List.set("gParam_outputFolder", "inputbase");
 List.set("gParam_minDiamMicrons", "50");
+List.set("gParam_thresholdmethod", "Otsu");
+  // Others which work well:
+  //   "Default","Intermodes","IsoData","IJ_IsoData","Li","Minimum","Moments",
+  //   "RenyiEntropy","Triangle","Yen"
+List.set("gParam_darkBackground", "true");  //or "false"
 
 /////////////////////////////////////////////////////////////////////////////
 // Define useful constants
@@ -86,6 +91,8 @@ function resetLocals(){
   List.set("useCLAHE", List.get("gParam_useCLAHE"));
   List.set("outdir", List.get("gParam_outdir")); 
   List.set("minDiamMicrons", List.get("gParam_minDiamMicrons")); 
+  List.set("thresholdmethod", List.get("gParam_thresholdmethod"));
+  List.set("darkBackground", List.get("gParam_darkBackground"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -114,18 +121,17 @@ function processFolder(){
             "blocksize=127 histogram=256 maximum=3 mask=*None*");
       }
 
-      // #TODO these should be params
-      setOption("BlackBackground", true);
-      setAutoThreshold("Otsu");
+      // Define thresholding method
+      setOption("BlackBackground", 
+                ("TRUE" == toUpperCase(List.get("darkBackground"))));
+      setAutoThreshold(List.get("thresholdmethod"));
       run("Set Measurements...", "area mean min centroid perimeter" +
            " bounding fit shape feret's integrated median skewness" +
            " kurtosis area_fraction add redirect=None decimal=3");
     
     
       //Determine minimum size particle to observe
-      // Set size to be roughly 50 um diameter
       getPixelSize(unit, pw, ph, pd);
-      // #TODO this should be a param
       minDiamUm = parseInt(List.get("minDiamMicrons"));
       minArea = 3.14159265 * ((minDiamUm / 2)^2); //sq microns
       if(pw != ph){
@@ -163,6 +169,8 @@ function processFolder(){
       open(inputPath);
       selectWindow(fname);
       baseName = substring(fname, 0, lengthOf(fname) - 4);
+      // #TODO improve overlay - better contrast? color coding +/- overlay?
+      // #TODO better (larger) particle ID labels
       run("Add Image...", "image=["  +baseName +
               "-1.tif] x=0 y=0 opacity=60 zero");
       run("8-bit");
