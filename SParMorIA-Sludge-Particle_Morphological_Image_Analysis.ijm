@@ -73,6 +73,8 @@ for (i = 0; i < rows.length; i++){
 /////////////////////////////////////////////////////////////////////////////
 function readParams(line, prefix){
   // #TODO gracefully handle blank lines and other format breaking issues
+  // Example, at least have an informative dialog box with line causing
+  // error.  This would've helped with malformed double ",," debugging.
   lineArgs = split(line, ",");
   for (j = 0; j < lineArgs.length; j++){
     arg=split(lineArgs[j], "=");
@@ -147,6 +149,8 @@ function processFolder(){
 
       size = parseFloat(convFactor) * minArea;
     
+      // No need to convert to pixels (e.g. use pw or ph). Analyze particles,
+      // as called here, understands the unit param and does the conversion.
       // Perform image analysis
       run("Analyze Particles...", "size=" + size + 
               "-Infinity show=Outlines display exclude clear summarize" +
