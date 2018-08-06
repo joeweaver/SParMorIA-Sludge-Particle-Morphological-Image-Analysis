@@ -22,6 +22,7 @@ List.set("gParam_thresholdmethod", "Otsu");
   //   "Default","Intermodes","IsoData","IJ_IsoData","Li","Minimum","Moments",
   //   "RenyiEntropy","Triangle","Yen"
 List.set("gParam_darkBackground", "true");  //or "false"
+List.set("gParam_fontSize","NONE"); //Try to guess font size, or specify as pt 
 
 /////////////////////////////////////////////////////////////////////////////
 // Define useful constants
@@ -95,6 +96,7 @@ function resetLocals(){
   List.set("minDiamMicrons", List.get("gParam_minDiamMicrons")); 
   List.set("thresholdmethod", List.get("gParam_thresholdmethod"));
   List.set("darkBackground", List.get("gParam_darkBackground"));
+  List.set("fontSize", List.get("gParam_fontSize"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -146,17 +148,57 @@ function processFolder(){
       if( "" == convFactor){
         exit("Don't know how to support pixel size given as unit: " + unit);
       }
-
       size = parseFloat(convFactor) * minArea;
-    
-      // No need to convert to pixels (e.g. use pw or ph). Analyze particles,
+      
+      // Determine our font size based on either min particle size or as
+      // specified in the params file.
+      if("NONE" == toUpperCase(List.get("fontSize"))){
+        pxdiam = minDiamUm * sqrt(convFactor) / pw;
+        fontsize = maxOf(48, pxdiam / 0.75);
+      }
+      else{
+        fontsize = parseInt(List.get("fontSize"));
+      }
+
+      // No need to convert to pixels (e.g. pw or ph). "Analyze particles",
       // as called here, understands the unit param and does the conversion.
       // Perform image analysis
-      run("Analyze Particles...", "size=" + size + 
-              "-Infinity show=Outlines display exclude clear summarize" +
-              " in_situ");
+      run("Analyze Particles...", "size=" + size + "-Infinity" + 
+          " show=[Bare Outlines] display add exclude clear summarize");
+
+      // Add legible labels to the outlined detected particles
+      run("Labels...", "color=black font=" + fontsize + " show"); 
+
+      // Use the ROI manager and color channesl to create a high contrast
+      // composite overlay for QC checking.
+      // This is, charitably, "acrobatic" and could be simplified.
+      roiManager("Set Color", "black");
+      roiManager("Set Line Width", 5);
+      run("Flatten");
+      run("View 100%");
+      im1 = getInfo("window.title");
+      open(inputPath);
+      selectWindow(fname);
+      run("RGB Color");
+      run("Split Channels");
+      selectWindow(fname + " (green)");
+      run("View 100%");
+      im2 = getInfo("window.title");
+      print("Im1: " + im1);
+      print("im2: " + im2);
+      imageCalculator("Add create 32-bit", im1, im2);
+      run("View 100%");
+      im3 = getInfo("window.title");
+      run("8-bit");
+      run("Merge Channels...", "c1=[" + fname + " (green)" + "] c2=[" +
+          im3 + "] c3=[" + fname + " (green)" + "] create");
+      selectWindow("Composite");
+      run("RGB Color");
+      run("8-bit Color", "number=256");
+      run("View 100%");
+      imfinal = getInfo("window.title");
       
-      // Write output
+      //Write numeric results
       selectWindow("Results");
       if("inputbase" == writeDir){
         writeDir=readDir + "\\output";
@@ -169,24 +211,18 @@ function processFolder(){
         File.makeDirectory(resultsDir);
       }
       saveAs("Results", resultsDir + "\\" + fname + "_PSD.csv");
-      run("Invert");
-      open(inputPath);
-      selectWindow(fname);
-      baseName = substring(fname, 0, lengthOf(fname) - 4);
-      // #TODO improve overlay - better contrast? color coding +/- overlay?
-      // #TODO better (larger) particle ID labels
-      run("Add Image...", "image=["  +baseName +
-              "-1.tif] x=0 y=0 opacity=60 zero");
-      run("8-bit");
 
+      // Write overlay for QC
+      selectWindow(imfinal);
       overlayDir = writeDir + "\\" + "overlays";
       if(!File.exists(overlayDir)){
         File.makeDirectory(overlayDir);
       }
-      saveAs("Gif", overlayDir + "\\" + baseName + "_overlay.gif");
-      run("Close All");
+
+      saveAs("Gif", overlayDir + "\\" + fname + "_overlay.gif");
       
       // Cleanup after ourselves
+      run("Close All");
       while (nImages > 0) { 
         selectImage(nImages); 
         lose(); 
