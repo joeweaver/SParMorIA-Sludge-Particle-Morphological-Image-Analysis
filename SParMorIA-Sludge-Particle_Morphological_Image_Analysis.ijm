@@ -137,7 +137,7 @@ function processFolder(){
       //Determine minimum size particle to observe
       getPixelSize(unit, pw, ph, pd);
       minDiamUm = parseInt(List.get("minDiamMicrons"));
-      minArea = 3.14159265 * ((minDiamUm / 2)^2); //sq microns
+      minArea = minDiamUm*minDiamUm/4*3.14159265;//3.14159265 * ((minDiamUm / 2)^2); //sq microns
       if(pw != ph){
         // TODO pick reasonable default or interpretation for minimum 
         // particle size when pixels are not square
@@ -149,7 +149,14 @@ function processFolder(){
         exit("Don't know how to support pixel size given as unit: " + unit);
       }
       size = parseFloat(convFactor) * minArea;
-      
+      print("Minimum d in  um: "+ minDiamUm);
+      print("Minimum area in sq um: "+ minArea);
+      print("Minimum area in sq cm: "+ size);
+      print("Minimum side in cm: "+ sqrt(size));
+      print("Minimum side in px: "+ sqrt(size)/pw);
+      print("Pixel width um: " + pw*10000);
+      print("Pixel area sq um: " + pw*pw*(10000000));
+      // #TODO warn if min area will give < ~ 25 px per side, error if < 1)
       // Determine our font size based on either min particle size or as
       // specified in the params file.
       if("NONE" == toUpperCase(List.get("fontSize"))){
