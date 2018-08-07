@@ -149,13 +149,6 @@ function processFolder(){
         exit("Don't know how to support pixel size given as unit: " + unit);
       }
       size = parseFloat(convFactor) * minArea;
-      print("Minimum d in  um: "+ minDiamUm);
-      print("Minimum area in sq um: "+ minArea);
-      print("Minimum area in sq cm: "+ size);
-      print("Minimum side in cm: "+ sqrt(size));
-      print("Minimum side in px: "+ sqrt(size)/pw);
-      print("Pixel width um: " + pw*10000);
-      print("Pixel area sq um: " + pw*pw*(10000000));
       // #TODO warn if min area will give < ~ 25 px per side, error if < 1)
       // Determine our font size based on either min particle size or as
       // specified in the params file.
@@ -191,8 +184,6 @@ function processFolder(){
       selectWindow(fname + " (green)");
       run("View 100%");
       im2 = getInfo("window.title");
-      print("Im1: " + im1);
-      print("im2: " + im2);
       imageCalculator("Add create 32-bit", im1, im2);
       run("View 100%");
       im3 = getInfo("window.title");
@@ -206,6 +197,7 @@ function processFolder(){
       imfinal = getInfo("window.title");
       
       //Write numeric results
+      # TODO append unit to results and/or make target unit a parameter?
       selectWindow("Results");
       if("inputbase" == writeDir){
         writeDir=readDir + "\\output";
