@@ -196,8 +196,8 @@ function processFolder(){
       run("View 100%");
       imfinal = getInfo("window.title");
       
-      //Write numeric results
-      # TODO append unit to results and/or make target unit a parameter?
+      // Write numeric results
+      // # TODO append unit to results and/or make target unit a parameter?
       selectWindow("Results");
       if("inputbase" == writeDir){
         writeDir=readDir + "\\output";
