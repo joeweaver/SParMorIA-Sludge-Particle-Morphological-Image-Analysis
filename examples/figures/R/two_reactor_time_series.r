@@ -62,8 +62,8 @@ data$sampleDate <- ymd_hm(stringr::str_match(
 
 # In the case of external metadata, we can record observations in an external
 # file, read it into a dataframe, then merge the result with our existing
-# data.  For example, let's say that reactor 1 was 'stinky' on 2017-12-19
-# and reactor 2 was 'stinky on 2017-12-08.
+# data.  For example, let's say that reactor 1 was 'yeasty' on 2017-12-19
+# and reactor 2 was 'vinegary' on 2017-12-08.
 #
 # We could record that data in a csv (viewable in data/observations.csv)
 # and then read and merge, like so:
