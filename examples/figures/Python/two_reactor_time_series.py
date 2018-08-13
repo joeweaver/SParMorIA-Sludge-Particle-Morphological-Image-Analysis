@@ -109,11 +109,11 @@ ax.get_figure().savefig(os.path.join("output", "two_reactor_time_series.svg"))
 ax.get_figure().savefig(os.path.join("output", "two_reactor_time_series.pdf"))
 
 # Try to record some relevant session info
-with open(os.path.join("output", "sessionInfo.txt"),"w") as f:
-  import sys
-  f.write("Python: " + sys.version + "\n")
-  f.write("Pandas: " + pd.__version__ + "\n")
-  f.write("Numpy: " + np.__version__ + "\n")
-  f.write("Seaborn: " + sns.__version__ + "\n")
-  import matplotlib
-  f.write("Pyplot via Matplotlib: " + matplotlib.__version__ + "\n")
+with open(os.path.join("output", "sessionInfo.txt"), "w") as f:
+    import sys
+    f.write("Python: " + sys.version + "\n")
+    f.write("Pandas: " + pd.__version__ + "\n")
+    f.write("Numpy: " + np.__version__ + "\n")
+    f.write("Seaborn: " + sns.__version__ + "\n")
+    import matplotlib
+    f.write("Pyplot via Matplotlib: " + matplotlib.__version__ + "\n")
