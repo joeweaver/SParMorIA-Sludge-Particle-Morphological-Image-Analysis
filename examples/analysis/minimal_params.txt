@@ -1,0 +1,4 @@
+# This a a minimal parameters file. All parameters are left default and three input directories are specified. Output will be placed into "output" subdirectories in each input directory.
+indir=c:\\data\\rep1
+indir=c:\\data\\rep2
+indir=c:\\data\\rep3

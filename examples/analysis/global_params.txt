@@ -1,0 +1,10 @@
+# This a parameters file in which some global parameters are set. 
+minDiamMicrons=150,useCLAHE=no,outdir=c:\\data\\output
+# Based on the above global parameters we will only report particles with an equivalent diameter of 150, not use CLAHE (which is default anyway), and output all work into the specified directory.
+indir=c:\\data\\rep1
+indir=c:\\data\\rep2
+# Since each line of a params file is applied as read, we can redo the analysis for a smaller diameter. (There are surely better ways to do this with overrides and downstream, but this is illustrative.)
+minDiamMicrons=100,outdir=c:\\data\\output_small
+indir=c:\\data\\rep1
+indir=c:\\data\\rep2
+indir=c:\\data\\rep3

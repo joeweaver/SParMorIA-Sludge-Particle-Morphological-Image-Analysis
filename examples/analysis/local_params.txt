@@ -1,0 +1,7 @@
+# This a parameters file in which some global parameters are set and, one case overriden with a local parameter.. 
+# In this analysis, both the files in the ```rep1``` and ```rep3``` directories will be subjected to a 150 min diameter cutoff and the results will be output to the specified global ```outdir```.
+# The files in ```rep2``` will also use the global ```outdir```, but the global min diameter cutoff will be locally overriden to 100 microns.
+minDiamMicrons=150,useCLAHE=no,outdir=c:\\data\\output
+indir=c:\\data\\rep1
+indir=c:\\data\\rep2,minDiamMicrons=100
+indir=c:\\data\\rep3
