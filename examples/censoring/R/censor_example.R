@@ -1,7 +1,7 @@
 ################################################################################
-# Compare changes in particle size distributions over time between two
-# two reactors, using data taken from image analysis as desribed in
-# the paper XXX title name XXX in JOVE XXX pub info XXX
+# Example of non-destructive, explicit, and trackable censoring of whole files
+# and individual particles in image analysis, supporting the paper 
+# XXX title name XXX in JOVE XXX pub info XXX
 #
 # Joseph E. Weaver
 # jeweave4@ncsu.edu
