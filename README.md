@@ -19,6 +19,12 @@ Alternately, the macro may be directly copied to ```\Fiji.app\macros```
 ## Running
 
 Define the analysis parameters in a text file, according to the description given in ```examples\analysis\README.md```
+
+Run from the command line:
+
+```<FIJI-PATH>\ImageJ-win64.exe --console -macro SParMorIA-SludgeParticle_Morphological_Image_Analysis <paramsfile>```
+where ```<FIJI-path>``` is the directory in which ImageJ-win64.exe is located and ```<paramsfile>``` the location of the text file describing the analysis setup.
+
 CSV files and quality control images will be placed respectively in the ```results``` and ```overlays``` subdirectories of the specified ```output``` folder.
 
 Example CSV files are located under ```examples\data```.
