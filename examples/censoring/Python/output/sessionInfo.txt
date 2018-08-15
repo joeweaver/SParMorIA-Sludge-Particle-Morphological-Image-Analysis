@@ -1,0 +1,2 @@
+Python: 3.6.2 |Anaconda, Inc.| (default, Sep 19 2017, 08:03:39) [MSC v.1900 64 bit (AMD64)]
+Pandas: 0.20.3

@@ -1,0 +1,3 @@
+filename,particleId,notes
+foreign_particle.tif_PSD.csv, 15, Tardigrade
+date-2017-12-08-1200_reactor-1_rep-A_pxpm-1729417_trial-4_image-0031.tif_PSD.csv, 3, Actually OK particle included here to show remvoing more than 1 particle from analysis
