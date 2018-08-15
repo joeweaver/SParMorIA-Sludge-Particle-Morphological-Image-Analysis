@@ -73,7 +73,7 @@ censored <- anti_join(censored, parts_2_ignore,
                        by=c("filename"="filename","X1" = "particleId"))
 
 # At this point, censored is ready to use for analysis, the remaining
-# code produces a table showin the particle and file count from each
+# code produces a table showing the particle and file count from each
 # censoring step
 
 # Record our progress
