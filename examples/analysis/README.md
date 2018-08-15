@@ -13,6 +13,14 @@ Each line of a parameters file can be either:
 * a specified input directory with (optionally) local parameters overriding 
   any global parameters and default settings
 
+*Line order matters*. Each line is processed when read, the result is that
+a parameter will not take effect until specified. In other words, if you 
+specify an input directory *A* and *then* a global parameter and then another
+input directory *B*, that parameter will only be applied to the analysis of 
+files in direcotry *B*.
+
+One use of this behavior is shown in ```global_params.txt```
+  
 ## Comments
 A comment line begins with the # character and may be used to relate any 
 necessary information to the human reading the parameters file.
@@ -43,7 +51,7 @@ The general format is
 For all examples, assume that images live in three directories:
 
 * c:\\data\\rep1
-*  c:\\data\\rep2
+* c:\\data\\rep2
 * c:\\data\\rep3
 
 A minimal example processing all three directories is given as:
