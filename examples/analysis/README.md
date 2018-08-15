@@ -19,7 +19,7 @@ specify an input directory *A* and *then* a global parameter and then another
 input directory *B*, that parameter will only be applied to the analysis of 
 files in direcotry *B*.
 
-One use of this behavior is shown in ```global_params.txt```
+One use of this behavior is shown in ```global_params.txt```A
   
 ## Comments
 A comment line begins with the # character and may be used to relate any 
