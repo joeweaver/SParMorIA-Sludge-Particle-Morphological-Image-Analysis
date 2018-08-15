@@ -14,7 +14,7 @@ args = getArgument();
 /////////////////////////////////////////////////////////////////////////////
 // Default parameters
 /////////////////////////////////////////////////////////////////////////////
-List.set("gParam_useCLAHE", "YES");
+List.set("gParam_useCLAHE", "NO");
 List.set("gParam_outputFolder", "inputbase");
 List.set("gParam_minDiamMicrons", "50");
 List.set("gParam_thresholdmethod", "Otsu");
