@@ -45,7 +45,7 @@ list of parameters overriding any global values for that directory only.
 
 The general format is
 
-```inputdir=c:\\data\\rep1,key1=value1"```
+```inputdir=c:\\data\\rep1,key1=value1```
 
 # Examples
 For all examples, assume that images live in three directories:
