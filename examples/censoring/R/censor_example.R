@@ -1,7 +1,9 @@
 ################################################################################
 # Example of non-destructive, explicit, and trackable censoring of whole files
-# and individual particles in image analysis, supporting the paper 
-# XXX title name XXX in JOVE XXX pub info XXX
+# and individual particles in image analysis, supporting the paper
+# "Measuring the shape and size of activated sludge particles immobilized in 
+# agar with an open source software pipeline" submitted to 
+# [JOVE](https://www.jove.com/).
 #
 # Joseph E. Weaver
 # jeweave4@ncsu.edu

@@ -1,5 +1,9 @@
 macro "SParMorIA: Sludge Particle Morphological Image Analysis"{
 
+// Pipeline described in "Measuring the shape and size of activated sludge 
+// particles immobilized in agar with an open source software pipeline" 
+// submitted to [JOVE](https://www.jove.com/)
+
 // args should point to a file containing processing information.
 // See params_example.txt
 args = getArgument();

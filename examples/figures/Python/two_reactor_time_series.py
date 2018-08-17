@@ -1,7 +1,9 @@
 ##############################################################################
 # Compare changes in particle size distributions over time between two
 # two reactors, using data taken from image analysis as desribed in
-# the paper XXX title name XXX in JOVE XXX pub info XXX
+# the paper "Measuring the shape and size of activated sludge particles 
+# immobilized in  agar with an open source software pipeline" submitted to 
+# [JOVE](https://www.jove.com/).
 #
 # Joseph E. Weaver
 # jeweave4@ncsu.edu

@@ -1,6 +1,6 @@
 # SParMorIA: Sludge Particle Morphological Image Analysis
 
-FIJI/ImageJ macro which analyzes images of activated and granular sludge particles immoblized in agar. Supports the paper XXX title XXX published in JOVE.
+FIJI/ImageJ macro which analyzes images of activated and granular sludge particles immoblized in agar. Supports the paper "Measuring the shape and size of activated sludge particles immobilized in agar with an open source software pipeline" submitted to [JOVE](https://www.jove.com/).
 
 ## Getting Started
 
