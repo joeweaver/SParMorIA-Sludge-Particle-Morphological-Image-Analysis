@@ -8,7 +8,7 @@ FIJI/ImageJ macro which analyzes images of activated and granular sludge particl
 ### Prerequisites
 
 * A recent copy of [FIJI](https://imagej.net/Fiji/Downloads).
-* Preferably, a collection of images to be analyzed. Sample images can be found in the supporting infomration for the journal article.XXX linkXXX
+* Preferably, a collection of images to be analyzed. Sample images can be found in the supporting infomration for the journal article.
 
 ### Installing
 
